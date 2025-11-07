@@ -1,0 +1,29 @@
+@host = http://localhost:5182
+
+GET {{host}}/api/products
+
+### Get by ID
+GET {{host}}/api/products/1
+
+### Create
+POST {{host}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "price": 1200,
+  "stock": 5
+}
+
+### Update
+PUT {{host}}/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Gaming Laptop",
+  "price": 1500,
+  "stock": 8
+}
+
+### Delete
+DELETE {{host}}/api/products/1
