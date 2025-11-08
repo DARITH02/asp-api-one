@@ -12,20 +12,45 @@ public class AppDbContext:DbContext
     public DbSet<Product> products => Set<Product>();
     public DbSet<Category> Categories=>Set<Category>();
     public DbSet<Supplier> Suppliers=>Set<Supplier>();
+    public DbSet<Purchase>  Purchases  => Set<Purchase>();
+    public DbSet<PurchaseDetails>  PurchaseDetails => Set<PurchaseDetails>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        // relationship between product and  category
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.Category_id)
             .OnDelete(DeleteBehavior.SetNull);
         
+        // relationship between product and  supplier
         modelBuilder.Entity<Product>()
             .HasOne(p=>p.Supplier)
             .WithMany(s=>s.Products)
             .HasForeignKey(p=>p.Supplier_id)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        
+        // relationship between purchase and Supplierc
+        modelBuilder.Entity<Purchase>()
+            .HasOne(p =>p.Supplier)
+            .WithMany(s => s.Purchases)
+            .HasForeignKey(p => p.SupplierId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        
+        
+        // relationship between purchase detail and product and purchase
+        modelBuilder.Entity<PurchaseDetails>()
+            .HasOne(p => p.Purchase)
+            .WithMany(p => p.Details)
+            .OnDelete(DeleteBehavior.SetNull);
+        modelBuilder.Entity<PurchaseDetails>()
+            .HasOne(p => p.Product)
+            .WithMany(p => p.Details)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

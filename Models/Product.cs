@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationApi1.Models
 {
@@ -11,6 +12,7 @@ namespace WebApplicationApi1.Models
         [Required]
         public string Name { get; set; } = string.Empty;
 
+        [Column(TypeName = "decimal(18,2)")] 
         public decimal Price { get; set; } 
         public int Stock { get; set; }
         
@@ -31,5 +33,9 @@ namespace WebApplicationApi1.Models
             Price = price;
             Stock = stock;
         }
+        
+        public ICollection<PurchaseDetails>? Details { get; set; }
+        
+        
     }
 }

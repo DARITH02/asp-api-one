@@ -21,7 +21,7 @@ namespace WebApplicationApi1.Controllers
         public async Task<IActionResult> GetAll()
         {
             var suppliers = await _context.Suppliers
-                .Include(s => s.Products) // optional, include products
+                .Include(s => s.Products) 
                 .ToListAsync();
             return Ok(suppliers);
         }
@@ -33,10 +33,8 @@ namespace WebApplicationApi1.Controllers
             var supplier = await _context.Suppliers
                 .Include(s => s.Products)
                 .FirstOrDefaultAsync(s => s.Id == id);
-
             if (supplier == null)
                 return NotFound(new { message = "Supplier not found" });
-
             return Ok(supplier);
         }
 
@@ -52,7 +50,6 @@ namespace WebApplicationApi1.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = supplier.Id }, supplier);
         }
-
         // PUT: api/suppliers/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Supplier supplier)
@@ -66,8 +63,7 @@ namespace WebApplicationApi1.Controllers
 
             // Update fields
             existing.Name = supplier.Name;
-            existing.Description = supplier.Description;
-
+          
             await _context.SaveChangesAsync();
             return Ok(existing);
         }

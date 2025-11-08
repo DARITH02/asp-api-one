@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationApi1.Data;
 
@@ -11,9 +12,11 @@ using WebApplicationApi1.Data;
 namespace WebApplicationApi1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108035248_Purchase")]
+    partial class Purchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,38 +103,6 @@ namespace WebApplicationApi1.Migrations
                     b.ToTable("Purchases");
                 });
 
-            modelBuilder.Entity("WebApplicationApi1.Models.PurchaseDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PurchaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("PurchaseId");
-
-                    b.ToTable("PurchaseDetails");
-                });
-
             modelBuilder.Entity("WebApplicationApi1.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -191,36 +162,9 @@ namespace WebApplicationApi1.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("WebApplicationApi1.Models.PurchaseDetails", b =>
-                {
-                    b.HasOne("WebApplicationApi1.Models.Product", "Product")
-                        .WithMany("Details")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("WebApplicationApi1.Models.Purchase", "Purchase")
-                        .WithMany("Details")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Purchase");
-                });
-
             modelBuilder.Entity("WebApplicationApi1.Models.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("WebApplicationApi1.Models.Product", b =>
-                {
-                    b.Navigation("Details");
-                });
-
-            modelBuilder.Entity("WebApplicationApi1.Models.Purchase", b =>
-                {
-                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("WebApplicationApi1.Models.Supplier", b =>
