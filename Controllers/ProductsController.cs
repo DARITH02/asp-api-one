@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationApi1.Data;
+using WebApplicationApi1.DTOs;
 using WebApplicationApi1.Models;
 
 namespace WebApplicationApi1.Controllers
@@ -21,14 +22,24 @@ namespace WebApplicationApi1.Controllers
             _context = context;
         }
 
-         // GET: api/products
+        // GET: api/Products
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
             var products = await _context.products
-                .Include(p => p.Category)   // load related Category
-                .Include(p => p.Supplier)   // load related Supplier
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Stock = p.Stock,
+                    CategoryId = p.Category != null ? p.Category.Id : null,
+                    SupplierId = p.Supplier != null ? p.Supplier.Id : null
+                })
                 .ToListAsync();
+
             return Ok(products);
         }
 

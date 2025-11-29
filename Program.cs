@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationApi1.Data;
 using Microsoft.OpenApi.Models;
@@ -33,6 +34,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add Repositories and Services
 //builder.Services.AddScoped<IProductRepository, ProductRepository>();
 //builder.Services.AddScoped<ProductService>();
+
+
+//prevent loop fo null object 
+/*
+builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); // ✅ Prevent loop
+        */
+
+
+
 
 var app = builder.Build();
 

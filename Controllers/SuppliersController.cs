@@ -39,17 +39,31 @@ namespace WebApplicationApi1.Controllers
         }
 
         // POST: api/suppliers
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> Create(Supplier supplier)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            _context.Suppliers.Add(supplier);
+            //_context.Suppliers.Add(supplier);
+             _context.Suppliers.AddRangeAsync(supplier);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = supplier.Id }, supplier);
+        }*/
+        
+        [HttpPost("bulk")]
+        public async Task<IActionResult> CreateBulk([FromBody] List<Supplier> suppliers)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _context.Suppliers.AddRangeAsync(suppliers); // <-- Add collection
+            await _context.SaveChangesAsync();
+
+            return Ok(suppliers);
         }
+
         // PUT: api/suppliers/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Supplier supplier)

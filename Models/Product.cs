@@ -36,6 +36,9 @@ namespace WebApplicationApi1.Models
         
         public ICollection<PurchaseDetails>? Details { get; set; }
         
+        public ICollection<StockLogs>? Logs { get; set; }
+
+        
         
     }
 }

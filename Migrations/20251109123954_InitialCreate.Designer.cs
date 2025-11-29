@@ -12,8 +12,8 @@ using WebApplicationApi1.Data;
 namespace WebApplicationApi1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251108035248_Purchase")]
-    partial class Purchase
+    [Migration("20251109123954_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,78 @@ namespace WebApplicationApi1.Migrations
                     b.ToTable("Purchases");
                 });
 
+            modelBuilder.Entity("WebApplicationApi1.Models.PurchaseDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PurchaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("WebApplicationApi1.Models.StockLogs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChangeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NewStock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OldStock")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantityChange")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("StockLogs", (string)null);
+                });
+
             modelBuilder.Entity("WebApplicationApi1.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -162,9 +234,48 @@ namespace WebApplicationApi1.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("WebApplicationApi1.Models.PurchaseDetails", b =>
+                {
+                    b.HasOne("WebApplicationApi1.Models.Product", "Product")
+                        .WithMany("Details")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("WebApplicationApi1.Models.Purchase", "Purchase")
+                        .WithMany("Details")
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Purchase");
+                });
+
+            modelBuilder.Entity("WebApplicationApi1.Models.StockLogs", b =>
+                {
+                    b.HasOne("WebApplicationApi1.Models.Product", "Product")
+                        .WithMany("Logs")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WebApplicationApi1.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WebApplicationApi1.Models.Product", b =>
+                {
+                    b.Navigation("Details");
+
+                    b.Navigation("Logs");
+                });
+
+            modelBuilder.Entity("WebApplicationApi1.Models.Purchase", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("WebApplicationApi1.Models.Supplier", b =>

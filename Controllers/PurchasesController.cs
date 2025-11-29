@@ -74,7 +74,7 @@ public class PurchasesController:ControllerBase
         _context.Add(purchase);
         await _context.SaveChangesAsync();
         
-        return CreatedAtAction(nameof(GetById),new {id=purchase.Id},purchase);
+        return CreatedAtAction(nameof(GetById),new {id = purchase.Id},purchase);
     }
     
     
